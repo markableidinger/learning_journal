@@ -12,6 +12,7 @@ import datetime
 import os
 import psycopg2
 from contextlib import closing
+import markdown
 
 DB_SCHEMA = """
 DROP TABLE IF EXISTS entries;
@@ -125,6 +126,8 @@ def do_login(username='', passwd=''):
 @app.route('/')
 def show_entries():
     entries = get_all_entries()
+    for el in entries:
+        el['html'] = markdown.markdown(el['text'])
     return render_template('list_entries.html', entries=entries)
 
 
