@@ -27,6 +27,9 @@ DB_ENTRY_INSERT = """
 INSERT INTO entries (title, text, created) VALUES (%s, %s, %s)
 """
 
+DB_ENTRY_EDIT = """
+UPDATE entries SET text = %s WHERE ID = %s
+"""
 app = Flask(__name__)
 
 app.config['DATABASE'] = os.environ.get(
@@ -103,6 +106,14 @@ def write_entry(title, text):
     cur.execute(DB_ENTRY_INSERT, [title, text, now])
 
 
+def edit(text, edit_id):
+    if not text:
+        raise ValueError("Title and text required for writing an entry")
+    con = get_database_connection()
+    cur = con.cursor()
+    cur.execute(DB_ENTRY_EDIT, [text, edit_id])
+
+
 def do_login(username='', passwd=''):
     if username != app.config['ADMIN_USERNAME']:
         raise ValueError
@@ -146,6 +157,11 @@ def logout():
     session.pop('logged_in', None)
     return redirect(url_for('show_entries'))
 
+
+@app.route('/edit', methods=['POST'])
+def edit_entry():
+    edit(request.form['edit_text'], request.form['edit_id'])
+    return redirect(url_for('show_entries'))
 
 if __name__ == '__main__':
     app.run(debug=True)

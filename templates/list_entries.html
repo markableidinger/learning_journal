@@ -24,6 +24,11 @@
     <div class="entry_body">
       {{ entry.text|safe }}
     </div>
+    <form action="{{ url_for('edit_entry') }}" method="POST" class="edit_entry">
+    <textarea name='edit_text' rows='5' cols='80'>{{ entry.text|safe }}</textarea>
+    <input type='submit' value='Edit' name='Edit'/>
+    <input type='hidden' value='{{entry.id}}' name='edit_id' />
+  </form>
   </article>
   {% else %}
   <div class="entry">
