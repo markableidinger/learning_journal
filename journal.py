@@ -13,6 +13,7 @@ import os
 import psycopg2
 from contextlib import closing
 import markdown
+import pygments
 
 DB_SCHEMA = """
 DROP TABLE IF EXISTS entries;
@@ -127,7 +128,7 @@ def do_login(username='', passwd=''):
 def show_entries():
     entries = get_all_entries()
     for el in entries:
-        el['html'] = markdown.markdown(el['text'])
+        el['html'] = markdown.markdown(el['text'], extensions=['codehilite'])
     return render_template('list_entries.html', entries=entries)
 
 
