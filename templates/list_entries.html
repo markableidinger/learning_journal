@@ -16,6 +16,7 @@
     </div>
   </form>
   </aside>
+{% endif %}
   <h2>Entries</h2>
   {% for entry in entries %}
   <article class="entry" id="entry={{entry.id}}">
@@ -24,10 +25,12 @@
     <div class="entry_body">
       {{ entry.html|safe }}
     </div>
+    {% if session.logged_in %}
     <form action="{{ url_for('edit_entry') }}" method="POST" class="edit_entry">
     <textarea name='edit_text' rows='5' cols='80'>{{ entry.text|safe }}</textarea>
     <input type='submit' value='Edit' name='Edit'/>
     <input type='hidden' value='{{entry.id}}' name='edit_id' />
+    {% endif %}
   </form>
   </article>
   {% else %}
@@ -35,5 +38,4 @@
     <p><em>No entries here so far</em></p>
   </div>
   {% endfor %}
-{% endif %}
 {% endblock %}

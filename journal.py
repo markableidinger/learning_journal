@@ -7,6 +7,7 @@ from flask import request
 from flask import url_for
 from flask import redirect
 from flask import session
+from flask import jsonify
 from passlib.hash import pbkdf2_sha256
 import datetime
 import os
@@ -165,7 +166,7 @@ def logout():
 @app.route('/edit', methods=['POST'])
 def edit_entry():
     edit(request.form['edit_text'], request.form['edit_id'])
-    return redirect(url_for('show_entries'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
